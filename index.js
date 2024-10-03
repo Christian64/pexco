@@ -35,8 +35,9 @@ function createLanguage(language) {
 const deleteProject = (project) => {
   rmdir(join(rootDir, `pexco/${project}`),
    (err)=> err
-  ? console.log(`Error borrando el proyecto: ${err.message}`) 
-  : console.log(`${project} ha sido borrado con exito!`) );
+  ? console.log(`Error deleting project: ${err.message}`) 
+  : console.log(`${project} has been deleted`) );
 };
 
 main();
+  
