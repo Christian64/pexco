@@ -1,27 +1,14 @@
-const { mkdirSync } = require("node:fs");
-const { Command } = require("commander");
-const program = new Command();
+import { mkdirSync } from "node:fs";
+import { rm } from "node:fs/promises";
+import { join } from "node:path";
 const rootDir = process.env.PWD;
 
-const main = () => {
-  program
-    .command("hello")
-    .description("Say hello world")
-    .action(() => {
-      console.log("Hello World");
-    });
-
-  program
-    .command("add")
-    .argument("<string>", "name of the langauge")
-    .description("Add new program language")
-    .action(createLengauge);
-
-  program.parse();
-};
-
-function createLengauge(language) {
-  mkdirSync(`${rootDir}/pexco/${language}`, { recursive: true });
+export function createLenguage(language) {
+  if (!language) return console.log("Language is required");
+  if (language)
+    mkdirSync(`${join(rootDir, "/pexco", language)}`, { recursive: true });
 }
 
-main();
+export function removeLenguage(language) {
+  rm(`${join(rootDir, "/pexco", language)}`, { recursive: true, force: true });
+}
