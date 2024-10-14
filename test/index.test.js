@@ -1,22 +1,22 @@
 import { describe, expect, onTestFinished, test } from "vitest";
-import { createLenguage, removeLenguage } from "../index.js";
-import { readdir, rm } from "node:fs/promises";
+import { createProject, deleteProject } from "../index.js";
+import { readdir } from "node:fs/promises";
 import { join } from "node:path";
 
 const rootDir = join(process.env.PWD, "/pexco");
 
 describe("Add new project", () => {
   test("should create a directory called javascript", async () => {
-    createLenguage("javascript");
-    createLenguage("ruby");
-    createLenguage("python");
+    createProject("javascript");
+    createProject("ruby");
+    createProject("python");
 
     expect(await readdir(rootDir)).toEqual(["javascript", "python", "ruby"]);
 
     onTestFinished(() => {
-      removeLenguage("javascript");
-      removeLenguage("python");
-      removeLenguage("ruby");
+      deleteProject("javascript");
+      deleteProject("python");
+      deleteProject("ruby");
     });
   });
 
