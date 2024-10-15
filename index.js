@@ -3,17 +3,24 @@ import fs from "node:fs/promises";
 import { platform } from "node:process";
 import { join } from "path";
 
-const rootDir = platform === "win32" ? process.cwd() : process.cwd();
+const rootDir = platform === "win32" ? process.cwd() : process.pwd();
 
 export function createProject(language) {
-  mkdirSync(join(rootDir, "pexco", language), { recursive: true });
+
+  const projectPath = join(rootDir, "pexco", language);
+
+  if (existsSync(projectPath)) {
+    throw new Error(`Directory ${language} already exists`);
+  }
+
+  mkdirSync(projectPath, { recursive: true });
 }
 
 export const deleteProject = async (project) => {
   const projectPath = join(rootDir, "pexco", project);
 
   try {
-    if (!projectPath) {
+    if (projectPath) {
       await fs.rm(projectPath, { recursive: true, force: true });
       console.log(`${project} has been deleted`);
     } else {
@@ -25,6 +32,11 @@ export const deleteProject = async (project) => {
 };
 
 export const searchProject = (language) => {
+
+  if (!language) {
+    throw new Error("Project name is required");
+  }
+
   const languagePath = join(rootDir, `pexco/${language}`);
 
   if (existsSync(languagePath)) {
@@ -36,6 +48,7 @@ export const searchProject = (language) => {
     console.log(`The folder ${languagePath} does not exist.`);
   }
 };
+
 
 export const lenguageList = () => {
   const projectPath = join(rootDir, "pexco");
